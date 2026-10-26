@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.grau.colegiodemo.mapper.ProfesorMapper">
+
+    <!-- Profesor con su lista de cursos -->
+    <resultMap id="ProfesorResultMap"
+               type="com.grau.colegiodemo.modelo.Profesor">
+
+        <id property="id" column="id"/>
+        <result property="nombre" column="nombre"/>
+        <result property="apellido" column="apellido"/>
+        <result property="tipo" column="tipo"/>
+
+        <collection property="cursos"
+                    ofType="com.grau.colegiodemo.modelo.Curso"
+                    column="id"
+                    select="com.grau.colegiodemo.mapper.CursoMapper.listarPorProfesor"/>
+    </resultMap>
+
+    <sql id="sqlProfesor">
+        SELECT id, nombre, apellido, tipo
+        FROM profesor
+    </sql>
+
+    <!-- Crear profesor -->
+    <insert id="crear"
+            parameterType="com.grau.colegiodemo.modelo.Profesor"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
+        INSERT INTO profesor (nombre, apellido, tipo)
+        VALUES (
+        #{nombre},
+        #{apellido},
+        CAST(#{tipo} AS tipo_profesor)
+        )
+    </insert>
+
+    <!-- Listar profesores con sus cursos -->
+    <select id="listar" resultMap="ProfesorResultMap">
+        <include refid="sqlProfesor"/>
+        ORDER BY id
+    </select>
+
+    <!-- Buscar profesor por ID con sus cursos -->
+    <select id="buscarPorId"
+            parameterType="java.lang.Integer"
+            resultMap="ProfesorResultMap">
+        <include refid="sqlProfesor"/>
+        WHERE id = #{id}
+    </select>
+
+    <!-- Actualizar profesor -->
+    <update id="actualizar"
+            parameterType="com.grau.colegiodemo.modelo.Profesor">
+        UPDATE profesor
+        SET nombre = #{nombre},
+        apellido = #{apellido},
+        tipo = CAST(#{tipo} AS tipo_profesor)
+        WHERE id = #{id}
+    </update>
+
+    <!-- Eliminar profesor -->
+    <delete id="eliminar" parameterType="java.lang.Integer">
+        DELETE FROM profesor
+        WHERE id = #{id}
+    </delete>
+
+    <select id="listarCursos"
+            parameterType="java.lang.Integer"
+            resultType="com.grau.colegiodemo.modelo.Curso"
+    >
+        SELECT c.*
+        FROM profesor p
+        LEFT JOIN curso c ON p.id = c.id_profesor
+        WHERE p.id = #{idProfesor}
+    </select>
+</mapper>

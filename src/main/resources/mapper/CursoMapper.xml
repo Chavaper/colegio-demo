@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.grau.colegiodemo.mapper.CursoMapper">
+
+    <!-- Curso con los datos de su profesor -->
+    <resultMap id="CursoResultMap" type="com.grau.colegiodemo.modelo.Curso">
+        <id property="id" column="curso_id"/>
+        <result property="nombre" column="curso_nombre"/>
+
+        <association property="profesor"
+                     javaType="com.grau.colegiodemo.modelo.Profesor">
+            <id property="id" column="profesor_id"/>
+            <result property="nombre" column="profesor_nombre"/>
+            <result property="apellido" column="profesor_apellido"/>
+            <result property="tipo" column="profesor_tipo"/>
+        </association>
+    </resultMap>
+
+    <!-- Curso sin objeto Profesor anidado: para la colección del profesor -->
+    <resultMap id="CursoSimpleResultMap" type="com.grau.colegiodemo.modelo.Curso">
+        <id property="id" column="id"/>
+        <result property="nombre" column="nombre"/>
+    </resultMap>
+
+    <sql id="sqlCurso">
+        SELECT
+        c.id AS curso_id,
+        c.nombre AS curso_nombre,
+        p.id AS profesor_id,
+        p.nombre AS profesor_nombre,
+        p.apellido AS profesor_apellido,
+        p.tipo AS profesor_tipo
+    </sql>
+
+    <!-- Crear curso -->
+    <insert id="crear"
+            parameterType="com.grau.colegiodemo.modelo.Curso"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
+        INSERT INTO curso (nombre, id_profesor)
+        VALUES (#{nombre}, #{profesor.id})
+    </insert>
+
+    <!-- Listar cursos con su profesor -->
+    <select id="listar" resultMap="CursoResultMap">
+        <include refid="sqlCurso"/>
+        FROM curso c
+        LEFT JOIN profesor p ON c.id_profesor = p.id
+        ORDER BY c.id
+    </select>
+
+    <!-- Buscar curso por ID -->
+    <select id="buscarPorId" resultMap="CursoResultMap">
+        <include refid="sqlCurso"/>
+        FROM curso c
+        LEFT JOIN profesor p ON c.id_profesor = p.id
+        WHERE c.id = #{id}
+    </select>
+
+    <!-- Listar cursos de un profesor, sin anidar nuevamente al profesor -->
+    <select id="listarPorProfesor" resultMap="CursoSimpleResultMap">
+        SELECT id, nombre
+        FROM curso
+        WHERE id_profesor = #{idProfesor}
+        ORDER BY id
+    </select>
+
+    <!-- Actualizar curso -->
+    <update id="actualizar"
+            parameterType="com.grau.colegiodemo.modelo.Curso">
+        UPDATE curso
+        SET nombre = #{nombre},
+        id_profesor = #{profesor.id}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Eliminar curso -->
+    <delete id="eliminar" parameterType="java.lang.Integer">
+        DELETE FROM curso
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

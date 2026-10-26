@@ -1,0 +1,31 @@
+# Build
+target/
+build/
+.gradle/
+sql/
+
+# Control de versiones
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Secretos y configuración local
+.env
+.env.*
+secrets/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Otros
+*.log
+README.md
