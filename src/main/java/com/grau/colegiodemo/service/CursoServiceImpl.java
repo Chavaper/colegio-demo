@@ -16,7 +16,7 @@ public class CursoServiceImpl implements CursoService {
 
     @Override
     public Integer crear(Curso curso) {
-        cursoMapper.buscarPorId(curso.getId());
+        buscarPorId(curso.getId());
         return cursoMapper.crear(curso);
     }
 
@@ -36,11 +36,13 @@ public class CursoServiceImpl implements CursoService {
 
     @Override
     public void actualizar(Curso curso) {
+        buscarPorId(curso.getId());
         cursoMapper.actualizar(curso);
     }
 
     @Override
     public Integer eliminar(Integer id) {
+        buscarPorId(id);
         return cursoMapper.eliminar(id);
     }
 
