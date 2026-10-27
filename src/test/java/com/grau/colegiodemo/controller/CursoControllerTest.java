@@ -1,11 +1,8 @@
 package com.grau.colegiodemo.controller;
 
 import com.grau.colegiodemo.controller.ControllerHandler.RecursoNoEncontradoException;
-import com.grau.colegiodemo.enums.TipoProfesor;
 import com.grau.colegiodemo.modelo.Curso;
-import com.grau.colegiodemo.modelo.Profesor;
 import com.grau.colegiodemo.service.CursoService;
-import com.grau.colegiodemo.service.ProfesorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -18,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProfesorController.class)
+@WebMvcTest(CursoController.class)
 class CursoControllerTest {
 
     @Autowired
@@ -48,7 +45,7 @@ class CursoControllerTest {
     @Test
     void buscarPorId_CuandoNoExiste_DebeRetornar404() throws Exception {
         Integer id = 999;
-        // Arrange: simular que no existe el profesor
+        // Arrange: simular que no existe el curso
         when(cursoService.buscarPorId(id))
                 .thenThrow(new RecursoNoEncontradoException("Curso con id " + id + " no existe"));
 
