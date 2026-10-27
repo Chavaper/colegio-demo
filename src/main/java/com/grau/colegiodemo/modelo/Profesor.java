@@ -2,6 +2,7 @@ package com.grau.colegiodemo.modelo;
 
 import com.grau.colegiodemo.enums.TipoProfesor;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,6 @@ public class Profesor {
     @NotBlank(message = "Debe ingresarse los apellidos del profesor")
     private String apellido;
     private List<Curso> cursos;
-    @NotBlank(message = "Debe ingresarse el tipo de profesor")
+    @NotNull(message = "Debe ingresarse el tipo de profesor")
     private TipoProfesor tipo;
 }

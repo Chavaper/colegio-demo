@@ -16,7 +16,6 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Override
     public Integer crear(Profesor profesor) {
-        buscarPorId(profesor.getId());
         return profesorMapper.crear(profesor);
     }
 
